@@ -1,4 +1,5 @@
 # XML Parse lib
+import json
 import xml.etree.ElementTree as ET
 
 #Parsing XML Function
@@ -46,7 +47,37 @@ def xml_parse_sample2():
         # Concatenate any number of strings.
         file.write('\n'.join(result))
 
+def xml_to_json_file():
+    tree = ET.parse('XML parse/XML sample.xml')
+    
+    # Get root
+    root = tree.getroot()
+    infos = root.findall('info')
+    
+    # Store result
+    result_dict = {}
+    
+    # Dictionary objects must have unique keys, 
+    # and since uniqueness is not required in XML, 
+    # I add a number to the name of each tag
+    for i, info in enumerate(infos):
+        sub_dict = {}
+        for j, subNode in enumerate(info):#iterating over sub nodes
+            sub_dict[f"{subNode.tag}{j}"] = subNode.text
+        result_dict[f"{info.tag}{i}"] = sub_dict
+    
+    with open('JSON form XML result.json', 'w') as file:
+        json.dump(result_dict, file)#Save to JSON file
+        
+    with open('JSON form XML result.json', 'r') as file:
+        result_from_json = json.load(file)#Load from JSON file
+
+    print(result_from_json, type(result_from_json))
+
+    print(result_dict == result_from_json)
+
 # Entry point
 if __name__ == '__main__':
-    xml_parse_sample()
-    xml_parse_sample2()
+    # xml_parse_sample()
+    # xml_parse_sample2()
+    xml_to_json_file()
