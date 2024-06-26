@@ -1,0 +1,8 @@
+We create a virtual environment
+○ python -m venv env
+○ source env/bin/activate / env\Scripts\activate
+○ deactivate
+○ pip install <library>
+○ pip freeze
+● We install libraries
+● We work with JSON (https://catfact.ninja/fact)
