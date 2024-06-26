@@ -1,1 +1,3 @@
 /xml facts result.txt
+/xml facts result 2.txt
+/JSON form XML result.json
