@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <info number="1">
+        <fact>Ginger tabby cats can have freckles around their mouths and on their eyelids!</fact>
+        <length>77</length>
+    </info>
+    <info number="2">
+        <fact>After humans, mountain lions have the largest range of any mammal in the Western Hemisphere.</fact>
+        <length>92</length>
+    </info>
+</root>
