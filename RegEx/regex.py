@@ -9,13 +9,14 @@ import re
 
 def show_and_count_re(targetFile, regexPattern):
     try:
+        print()
         with open(targetFile, "rt") as file:
             textFileData = file.read()
             
         result = re.findall(f"({regexPattern})", textFileData)
         
         if result:
-            print(f"\nResult by pattern: {regexPattern}")
+            print(f"Result by pattern: {regexPattern}")
             print(f"Result count: {result.count}")
             print(f"Result items:")
             for item in result:
@@ -28,7 +29,7 @@ def show_and_count_re(targetFile, regexPattern):
         print()
 
 if __name__ == '__main__':
-    # email validation
+    # Email validation
     # https://knowledge.validity.com/s/articles/What-are-the-rules-for-email-address-syntax?language=en_US
     #The recipient name may be a maximum of 64 characters long and consist of:
     #Uppercase and lowercase letters in English (A-Z, a-z)
@@ -46,3 +47,8 @@ if __name__ == '__main__':
     domainPattrern = r"(([a-zA-Z\d][a-zA-Z\d\-]*[a-zA-Z\d]\.)+[a-zA-Z\d][a-zA-Z\d\-]*[a-zA-Z\d])"
 
     show_and_count_re("RegEx/regex training.txt", f"{commonEmailUsernamePattrern}@{domainPattrern}")
+
+    # Date validation
+    datePattern = r"(([0123]\d[\/\.\-][0123]\d[\/\.\-][012]\d\d\d)|([012]\d\d\d[\/\.\-][0123]\d[\/\.\-][0123]\d)|((January|February|March|April|May|June|July|August|September|October|November|December) [0123]\d, [012]\d\d\d))"
+
+    show_and_count_re("RegEx/regex training.txt", datePattern)
