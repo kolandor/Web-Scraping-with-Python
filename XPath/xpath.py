@@ -35,4 +35,8 @@ def show_elements_by_xpath(url, xpath):
 
 
 if __name__ == "__main__":
-    show_elements_by_xpath("https://br.indeed.com/", "//input")
+    # //input[@id='text-input-what']
+    # //input[@id='text-input-where']
+    # //*[@id='jobsearch']//button OR //button[@class='yosegi-InlineWhatWhere-primaryButton']
+    
+    show_elements_by_xpath("https://br.indeed.com/", "input[@id='text-input-what']")
