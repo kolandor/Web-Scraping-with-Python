@@ -1,5 +1,6 @@
-# Python has a built-in package called re, which can be used to work with Regular Expressions
-# Import the re module:
+# sqlite3 — DB-API 2.0 interface for SQLite databases
+# https://docs.python.org/3/library/sqlite3.html
+
 import hashlib
 import re
 import requests
