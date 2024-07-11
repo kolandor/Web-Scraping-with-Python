@@ -64,7 +64,9 @@ if __name__ == "__main__":
     url = "https://www.lejobadequat.com/emplois"
     html = get_html_by_url(url)
     
-    #print(html)
     jobsTitlePattern = r'<h3 class="jobCard_title">([\w \/\-àâçéèêëîïôûùüÿñæœ]+)<\/h3>'
     
-    show_and_save_re(html, jobsTitlePattern, 1, "HTTP requests/result jobs.json")
+    #improved
+    jobsTitlePattern2 = r'<h3 class="jobCard_title"[^>]*>([\s\S]*?)<\/h3>'
+    
+    show_and_save_re(html, jobsTitlePattern2, 1, "HTTP requests/result jobs.json")
