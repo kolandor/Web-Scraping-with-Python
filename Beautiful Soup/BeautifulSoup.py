@@ -12,96 +12,96 @@ from bs4 import BeautifulSoup
 # saveFolder: 
 # hardload: download HTML even if file exists
 # userAgent: 
-def get_html_by_url(url, saveFolder = "Beautiful Soup/htmlbin", hardload = False, userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"):
+def get_html_by_url(url, save_folder = "Beautiful Soup/htmlbin", hardload = False, user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"):
     try:
         print()
     
-        responseHtml = ""
+        response_html = ""
         
-        filename = f"{saveFolder}/{hashlib.md5(url.encode("utf-8")).hexdigest()}.html"
+        filename = f"{save_folder}/{hashlib.md5(url.encode("utf-8")).hexdigest()}.html"
         
         #Check if content exists in file AD not hardload
         if os.path.exists(filename) and not hardload:
             with open(filename, "rt", encoding="utf-8") as file:
                 print(f"Reading html from: {filename}")
-                responseHtml = file.read()
+                response_html = file.read()
         else:
             print(f"Getting html from: {url}")
             response = requests.get(
                 url=url, #url
                 headers={#use headers to add my browser user agent
-                "User-Agent" : userAgent
+                "User-Agent" : user_agent
                 })
             print('Status code:', response.status_code)
             
             if response.status_code < 200 or response.status_code > 299:
                 raise Exception(f"Status coge {response.status_code} by getting from: {url}")
             
-            responseHtml = response.text
+            response_html = response.text
             with open(filename, "wt", encoding="utf-8") as file:
-                file.write(responseHtml)
+                file.write(response_html)
                 
         with open(filename, "rt", encoding="utf-8") as file:
-                responseHtml = file.read()
+                response_html = file.read()
         
         print()
-        return responseHtml
+        return response_html
     except Exception as e:
         print(f"ERROR: {e}")
 
-def get_bbc_sport_news_by_soup(newsMaxCountReturn):
+def get_bbc_sport_news_by_soup(news_max_count_return):
     try:
-        htmlContent = get_html_by_url(r"https://www.bbc.com/sport", hardload=True)
+        html_content = get_html_by_url(r"https://www.bbc.com/sport", hardload=True)
         
-        soup = BeautifulSoup(htmlContent, features="lxml")
+        soup = BeautifulSoup(html_content, features="lxml")
         
         #Get sports news promos by tag div contains data-testid="promo" AND type
         promos = soup.find_all("div", {"data-testid": "promo", "type": True})
         
-        promosData = []
+        promos_data = []
         
-        counter = newsMaxCountReturn
+        counter = news_max_count_return
         
         for promo in promos:
-            tempDictPromosData = {}
+            temp_dict_promos_data = {}
             try:
-                promoATags = promo.find_all("a")
+                promo_a_link = promo.find_all("a")
                 
-                if promoATags is not None and len(promoATags):
+                if promo_a_link is not None and len(promo_a_link):
                     
-                    aTag = promoATags[0]
+                    a_link_tag = promo_a_link[0]
                     
                     #Check reference
-                    if aTag.parent.has_attr("spacing"):
+                    if a_link_tag.parent.has_attr("spacing"):
                         # The tag does not contain a full link, but navigation within the site, so we use concatenation
-                        tempDictPromosData["Link"] = f"https://www.bbc.com{aTag["href"]}"
+                        temp_dict_promos_data["Link"] = f"https://www.bbc.com{a_link_tag["href"]}"
                         
                         #Skip life and video (is no contains topics)
-                        if "live" in tempDictPromosData["Link"] or "videos" in tempDictPromosData["Link"]:
+                        if "live" in temp_dict_promos_data["Link"] or "videos" in temp_dict_promos_data["Link"]:
                             continue
                     else:
                         continue
                     
                     #Then jump into news
-                    currentNewsHtml = get_html_by_url(tempDictPromosData["Link"], hardload=True)
+                    current_news_html = get_html_by_url(temp_dict_promos_data["Link"], hardload=True)
                     
-                    currentNewsSoup = BeautifulSoup(currentNewsHtml, features="lxml")
+                    current_news_soup = BeautifulSoup(current_news_html, features="lxml")
                     
                     #Find list of topics 
-                    ulOfTopics = currentNewsSoup.find("ul", {"spacing": "2"})
-                    if ulOfTopics is None:
-                        tempDictPromosData["Topics"] = None
+                    ul_of_topics = current_news_soup.find("ul", {"spacing": "2"})
+                    if ul_of_topics is None:
+                        temp_dict_promos_data["Topics"] = None
                     else:
-                        tempDictPromosData["Topics"] = []
+                        temp_dict_promos_data["Topics"] = []
                     
                         #Check parrent is a TopicList
-                        classTopicList = ulOfTopics.parent.previousSibling.get("class")
-                        if classTopicList:
-                            if "TopicList" in classTopicList[0]:
-                                for liTopic in ulOfTopics.children:
-                                    tempDictPromosData["Topics"].append(liTopic.find("a").text)
+                        class_topic_list = ul_of_topics.parent.previousSibling.get("class")
+                        if class_topic_list:
+                            if "TopicList" in class_topic_list[0]:
+                                for liTopic in ul_of_topics.children:
+                                    temp_dict_promos_data["Topics"].append(liTopic.find("a").text)
                 
-                promosData.append(tempDictPromosData)
+                promos_data.append(temp_dict_promos_data)
                 counter -= 1
             except Exception as e:
                 print(f"ERROR: {e}")
@@ -109,10 +109,10 @@ def get_bbc_sport_news_by_soup(newsMaxCountReturn):
             if not counter:
                 break
         
-        pprint(promosData)
-        print(len(promosData))
+        pprint(promos_data)
+        print(len(promos_data))
         
-        return promosData
+        return promos_data
     except Exception as e:
         print(f"ERROR: {e}")
 
