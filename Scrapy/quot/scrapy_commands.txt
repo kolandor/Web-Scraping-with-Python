@@ -1,0 +1,11 @@
+Initial:
+
+pip install scrapy
+scrapy startproject <name of project>
+scrapy genspider <spider name> <site>
+scrapy crawl <spider name>
+
+Save result:
+
+scrapy crawl <spider name> -o file.csv
+scrapy crawl <spider name> -o file.json
