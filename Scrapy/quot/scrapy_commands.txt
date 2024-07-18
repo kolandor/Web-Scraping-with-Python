@@ -9,3 +9,8 @@ Save result:
 
 scrapy crawl <spider name> -o file.csv
 scrapy crawl <spider name> -o file.json
+
+EXAMPLE:
+scrapy startproject quot
+scrapy genspider spid_qou https://quotes.toscrape.com/
+scrapy crawl spid_qou -o quotes_result.json
